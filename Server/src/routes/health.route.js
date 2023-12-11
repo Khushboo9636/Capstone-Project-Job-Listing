@@ -1,4 +1,4 @@
-var express = require('express')
+var express = require('express');
 var router = express.Router();
 
 //get heath api
@@ -10,6 +10,7 @@ var router = express.Router();
             state: 'active',
         }
         res.json(serverInfo)
+      
      } catch (error) {
         res.json({
             status: 'Failed',
