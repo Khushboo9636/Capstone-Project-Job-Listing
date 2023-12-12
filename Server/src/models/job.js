@@ -10,22 +10,11 @@ const jobSchema = new mongoose.Schema({
         required: true,
 
     }, 
-
-    remote: {
-        type: String,
-        enum: ['Remote', 'Office'],
-        required: true,
-
-    },
-    skills:{
-        type: [string],
-        required: true,
-
-
-    },
+    
     recruiterName: {
-        type:string,
+        type: String,
         required: true,
+      
 
     },
     createdAt: {
@@ -33,40 +22,56 @@ const jobSchema = new mongoose.Schema({
         default: Date.now
     },
     logoURL: {
-        type: string,
+        type: String,
         required: true,
 
     },
     position: {
-        type: string,
+        type: String,
         required: true,
 
 
     },
     MonthlySalary:{
-        type: string,
+        type: String,
         required: true,
     },
     jobType:{
-        type: string,
+        type: String,
         enum: ['Full-time', 'Part-time'],
         required: true,
     },
     location:{
-        type: string,
+        type: String,
         required: true,
 
     }, 
+    remote: {
+        type: String,
+        enum: ['Remote', 'Office'],
+        required: true,
+
+    },
+    skills:{
+        type: [String],
+        required: true,
+
+
+    },
     jobdescription: {
-        type: string,
+        type: String,
         required: true,
 
     },
     about: {
-        type: string,
+        type: String,
         required: true,
 
     },
-});
+    additionalInfo: {
+        type: String,
+        required: false,
+    }
+}, {timestamps: true});
 
 module.exports = mongoose.model('jobPost',jobSchema)

@@ -76,11 +76,11 @@ router.post('/login', async (req, res) => {
             return res.status(401).json({ error: 'Invalid email or password'})
         }
 
-        const token = jwt.sign({userId: user._id}, process.env.JWT_SECRET, {expiresIn: 60*30})
+        const token = jwt.sign({user: user.email}, process.env.JWT_SECRET, {expiresIn: 60*30})
         res.json({
              success: true,
              token,
-             recruiteName: user.name,
+             recruiterName: user.name,
              user: email
             
             });

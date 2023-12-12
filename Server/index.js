@@ -35,6 +35,7 @@ app.get("/", async( req,res) =>{
 app.use('/api/user', userRoutes);
 
 app.use('/api/health', healthRoute);
+app.use('/api/job', jobRoutes);
 
 
 
