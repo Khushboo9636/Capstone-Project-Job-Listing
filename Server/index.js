@@ -10,11 +10,20 @@ app.use(cors());
 
 app.use(bodyParser.urlencoded( {extended: false}));
 app.use(bodyParser.json());
+// app.use(express.json());
+
+// // Parse URL-encoded bodies
+// app.use(express.urlencoded({ extended: false }));
 app.use(express.static("public"));
 mongoose.connect(process.env.MONGODB_URL,{
     useNewUrlParser: true,
     useUnifiedTopology: true,
     
+});
+app.post('/your-endpoint', (req, res) => {
+  console.log(req.headers);
+  console.log(req.body);
+  // ...
 });
 
 const userRoutes = require('./src/routes/user.route.js')
