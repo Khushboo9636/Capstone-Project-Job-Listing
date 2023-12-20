@@ -5,7 +5,7 @@ const jobSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         auto: true,
     },
-    
+
     companyName: {
         type: String,
         required: true,
@@ -53,7 +53,7 @@ const jobSchema = new mongoose.Schema({
         required: true,
 
     },
-    skills:{
+    skillRequired:{
         type: [String],
         required: true,
 

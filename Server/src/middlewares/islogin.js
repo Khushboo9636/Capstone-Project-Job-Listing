@@ -20,6 +20,7 @@ require('dotenv').config()
         console.log(jwtDecode)
         console.log(req.body)
         req.body.user =jwtDecode.user;
+        req.body.name =jwtDecode.name;
         console.log("successfull")
         next();
     } catch (error) {

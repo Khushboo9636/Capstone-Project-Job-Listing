@@ -9,10 +9,11 @@ const errorHandler = (res,error) =>{
     res.status(500).json( { error:'Internal server error'})
 }
 
-router.post('/jobdescription', async (req, res) => {
+
+router.post('/jobdescription',auth, async (req, res) => {
     
  try{
-    console.log("Received Job Description using following data:", req.body);
+    console.log("Received Job Description using following data1:", req.body);
     const {
        companyName,
        logoURL,
@@ -26,10 +27,12 @@ router.post('/jobdescription', async (req, res) => {
        about,
        
     } = req.body;
-    console.log("Received Job Description using following data:", req.body);
-       return req.body;
- 
     const recruiterName = req.body.name;
+   
+    console.log("Received Job Description using following data2:", req.body);
+      // return req.body;
+ 
+  
  
     // if (!companyName || !logoURL || !position || !MonthlySalary || !jobType || !location || !remote || !jobdescription || !about) {
     //    return res.status(401).json({
@@ -38,9 +41,13 @@ router.post('/jobdescription', async (req, res) => {
     // }
  
     let skillsArray = skills;
-    if (typeof skills === 'String') {
+    console.log('Original skills:', skills);
+    
+    if (typeof skills === 'string') {
        skillsArray = skills.split(',').map(skill => skill.trim());
     }
+    
+    console.log('Processed skills:', skillsArray);
  
    
        const jobPost = new Job({
@@ -90,8 +97,9 @@ router.put('/editjob/:id', auth, async (req, res) =>{
           
       await jobUpdate.save();
         res.status(200).json({
-            status:'Success',
-            message: 'Job Updated successfully.'
+            success: true,
+            message: "Job Description Added Successfully",
+            name: recruiterName,
         })
     } catch (error) {
         console.error(error);

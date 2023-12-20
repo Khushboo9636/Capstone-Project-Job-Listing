@@ -8,21 +8,36 @@ dotenv.config()
 const app = express()
 app.use(cors());
 
-app.use(bodyParser.urlencoded( {extended: false}));
-app.use(bodyParser.json());
-// app.use(express.json());
+// Middleware to capture raw body
+// app.use((req, res, next) => {
+//     let data = '';
+//     req.setEncoding('utf8');
+//     req.on('data', (chunk) => {
+//       data += chunk;
+//     });
+  
+//     req.on('end', () => {
+//       req.rawBody = data;
+//       next();
+//     });
+//   });
+//app.use(express.json());
 
-// // Parse URL-encoded bodies
-// app.use(express.urlencoded({ extended: false }));
+
+ app.use(bodyParser.json());
+ app.use(bodyParser.urlencoded( {extended: true}));
+
 app.use(express.static("public"));
 mongoose.connect(process.env.MONGODB_URL,{
     useNewUrlParser: true,
     useUnifiedTopology: true,
     
 });
+
 app.post('/your-endpoint', (req, res) => {
-  console.log(req.headers);
-  console.log(req.body);
+    console.log('Request Headers:', req.headers);
+    console.log('Raw Body:', req.rawBody); // Log the raw body
+    console.log('Parsed Body:', req.body);
   // ...
 });
 
@@ -42,9 +57,10 @@ app.get("/", async( req,res) =>{
 });
 
 app.use('/api/user', userRoutes);
+app.use('/api/job', jobRoutes);
 
 app.use('/api/health', healthRoute);
-app.use('/api/job', jobRoutes);
+
 
 
 
