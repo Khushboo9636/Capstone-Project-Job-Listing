@@ -112,41 +112,43 @@ router.put('/editjob/:id', auth, async (req, res) =>{
 })
 
 
-router.get('/job-posts', async (req, res ) =>{
-    const { jobType, skillRequired } = req.query;
+
+router.get('/viewjoblist', async (req, res) =>{
+    const {jobType, skillRequired} = req.query
 
     try {
-        let query = {};
-        
-        if(jobType){
-            query.jobType = jobType;
-
+        let query ={};
+        if(jobType) {
+            query.jobType = jobType
         }
-
-        if(skillRequired){
-            query.skillRequired = { $in: skillRequired.split('&') };
+        if(skillRequired) {
+            query.skillRequired = { $in: skillRequired.split('&')};
 
         }
         console.log(query)
-        const allJobPost = await Job.find(query).sort({ createdAt: -1});
-
-    } catch(err) {
+        const jobPosts = await Job.find(query).sort({createdAt: -1});
+        return res.json({jobPosts})
+    } catch (error) {
         console.error(err);
         return res.status(500).json({ message: 'Internal server error'});
+          
     }
 })
 
 
-router.get('/job-posts/:id', async (req, res) => {
+router.get('/viewjob/:id', async (req, res) => {
     const jobId = req.params.id;
-    try{
-        const jobPost = await Job.findById(jobId);
-        if(!jobPost) {
+    try {
+        
+        const jobPost = await Job.findById(jobId)
+         if(!jobPost){
             return res.status(404).json({ message: 'Job post not found' });
-        } 
+
+         }
         return res.json(jobPost)
-       
-    } catch(err){
+
+    } catch (error) {;
+
         console.error(err);
     return res.status(500).json({ message: 'Internal server error' });
  

@@ -1,12 +1,16 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
-const cors = require('cors')
-const dotenv = require('dotenv')
+const cors = require('cors');
+const dotenv = require('dotenv');
 dotenv.config()
 
-const app = express()
-app.use(cors());
+const app = express();
+app.use(cors({
+    origin: 'http://localhost:3000',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+}));
 
 // Middleware to capture raw body
 // app.use((req, res, next) => {

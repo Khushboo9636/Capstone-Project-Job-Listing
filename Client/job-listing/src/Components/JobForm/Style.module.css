@@ -1,0 +1,40 @@
+.container {
+   margin: 20px;
+   padding: 10vh 7vw;
+   box-sizing: border-box;
+   width: 50vw;
+   position: relative;
+}
+.h1{
+    margin-bottom: 10px;
+    font-size: 2.5rem;
+    font-weight: 700;
+
+}
+.formGroup{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.5rem;
+    margin: 1rem 0;
+}
+
+.input{
+    width: 60%;
+}
+.cancel{
+   background-color: #ffffff;
+   border: 0.848485px solid #cecece;
+   border-radius: 6.50784px;
+   padding: 1em 2em;
+   margin-left: 15vw;
+   margin-right: 1vw;
+}
+.add{
+    background-color: #ED5353;
+    border-radius: 6.50784px;
+    padding: 1em 2em;
+    border: none;
+    color: white;
+    font-weight: 600;
+}

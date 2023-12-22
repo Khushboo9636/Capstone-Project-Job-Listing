@@ -1,0 +1,45 @@
+.nav{   
+    background: #ED5353;
+    border-radius: 0px 0px 62px 55px;
+    position: fixed;
+    top: 0;
+    display: flex;
+    width: 100vw;
+    height: 10vh;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5vw;
+    box-sizing: border-box;
+    z-index: 1;
+}
+
+.text{
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: white;
+}
+
+.login{
+    border: 2px solid white;
+    background-color: transparent;
+    color: white;
+    padding: 0.5rem 0.5rem;
+    font-weight: 600;
+    border-radius: 6px;
+    margin-right: 1rem;
+}
+
+.register{
+    color: #ED5353;
+    background-color: white;
+    padding: 0.5rem 0.5rem;
+    font-weight: 600;
+    border-radius: 6px;
+    border: none;
+}
+
+.loggedInText{
+    color: white;
+    font-weight: 600;
+    margin-right: 0.5rem;
+}

@@ -27,7 +27,7 @@ const handleSubmit = async (e) =>{
         const response = await fetch("http://localhost:4000/api/user/register", {
           method: "POST",
           headers: {
-            "content-Type": "appliction/json",
+            "Content-Type": "appliction/json",
 
           },
           body: JSON.stringify(formData)
@@ -44,6 +44,7 @@ const handleSubmit = async (e) =>{
         navigate("/listing")
 
     } catch (error) {
+        console.error("Error during fetching", error);
         alert("There is problem with sending request please check.")
     }
      
@@ -61,7 +62,7 @@ const handleSubmit = async (e) =>{
             <input className={styles.input} type="email" name="email" placeholder='Email' value={formData.email} onChange={handleChange} />
             <input className={styles.input} type="text" name="mobile" placeholder='Mobile' value={formData.mobile} onChange={handleChange} />
             <input className={styles.input} type="password" name="password" placeholder='Password' value={formData.password} onChange={handleChange} />
-            <span><input className={styles.checkedInput} type="checkbox" name="agreeTerms" value={formData.agreeTerms} onChange={handleChange} />
+            <span className={styles.message}><input className={styles.checkedInput} type="checkbox" name="agreeTerms" value={formData.agreeTerms} onChange={handleChange} />
             
                By creating an account you agree to our terms of use and privacy policy.
             </span>
