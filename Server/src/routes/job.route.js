@@ -1,6 +1,7 @@
 var express = require("express")
 const Job = require('../models/job.js')
-const auth = require('../middlewares/islogin.js')
+const auth = require('../middlewares/islogin.js');
+const job = require("../models/job.js");
 var router = express.Router();
 
 
@@ -25,6 +26,7 @@ router.post('/jobdescription',auth, async (req, res) => {
        skills,
        jobdescription,
        about,
+       additional,
        
     } = req.body;
     const recruiterName = req.body.name;
@@ -61,6 +63,7 @@ router.post('/jobdescription',auth, async (req, res) => {
           skillRequired: skillsArray,
           jobdescription,
           about,
+          additional,
           recruiterName
          
        });
@@ -83,22 +86,25 @@ router.put('/editjob/:id', auth, async (req, res) =>{
         const jobId  = req.params.id;
         const { companyName, jobType, skillRequired} = req.body;
         const recruiterName = req.body.name
-      const jobUpdate=  await Job.findById(jobId);
+      const jobUpdate=  await Job.findByIdAndUpdate(jobId, {
+        companyName:companyName,
+        jobType: jobType,
+        skillRequired: skillRequired,
+        recruiterName: recruiterName
 
-      if (!jobPost) {
+      }, { new: true});
+      await jobUpdate.save();
+
+      if (!jobUpdate) {
         return res.status(404).json({ 
             message: 'Job post not found'
         });
       }
-      jobUpdate.companyName = companyName;
-      jobUpdate.jobType = jobType;
-      jobUpdate.skillRequired= skillRequired;
-      jobUpdate.recruiterName= recruiterName;
           
-      await jobUpdate.save();
+     
         res.status(200).json({
             success: true,
-            message: "Job Description Added Successfully",
+            message: "Job Description Updated Successfully",
             name: recruiterName,
         })
     } catch (error) {
@@ -117,19 +123,21 @@ router.get('/viewjoblist', async (req, res) =>{
     const {jobType, skillRequired} = req.query
 
     try {
-        let query ={};
+        let filter ={};
         if(jobType) {
-            query.jobType = jobType
+            filter.jobType = jobType
         }
         if(skillRequired) {
-            query.skillRequired = { $in: skillRequired.split('&')};
-
+            filter.skillRequired = Array.isArray(skillRequired)
+                ? { $in: skillRequired }
+                : { $in: skillRequired.split('&') };
         }
-        console.log(query)
-        const jobPosts = await Job.find(query).sort({createdAt: -1});
+        
+        console.log(filter)
+        const jobPosts = await Job.find(filter).sort({createdAt: -1});
         return res.json({jobPosts})
     } catch (error) {
-        console.error(err);
+        console.error(error);
         return res.status(500).json({ message: 'Internal server error'});
           
     }
@@ -142,14 +150,21 @@ router.get('/viewjob/:id', async (req, res) => {
         
         const jobPost = await Job.findById(jobId)
          if(!jobPost){
-            return res.status(404).json({ message: 'Job post not found' });
+            return res.status(404).json(
+                { 
+                    message: 'Job post not found' 
+            });
 
          }
-        return res.json(jobPost)
+       res.status(200).json({
+
+        success: true,
+        data:jobPost,
+       })
 
     } catch (error) {;
 
-        console.error(err);
+        console.error(error);
     return res.status(500).json({ message: 'Internal server error' });
  
     }

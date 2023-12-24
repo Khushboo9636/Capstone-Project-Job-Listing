@@ -11,13 +11,13 @@ function JobForm() {
         companyName: "",
         logoURL: "",
         position: "",
-        salary : "",
+        MonthlySalary : "",
         jobType : "",
         remote :"",
         location: "",
-        description: "",
+        jobdescription: "",
         about: "",
-        skillsRequired: "",
+        skillRequired: "",
         additional: "",
     });
     console.log(formData);
@@ -25,131 +25,161 @@ function JobForm() {
 
 
     const handleChange = (e) => {
-        setFormData({...formData, [e.target.name]: e.target.value})
+        if (e.target.name === 'skillRequired') {
+          // Split the input string into an array using ',' as the separator
+          const skillsArray = e.target.value.split(',').map(skill => skill.trim());
+          setFormData({ ...formData, [e.target.name]: skillsArray });
+        } else {
+          setFormData({ ...formData, [e.target.name]: e.target.value });
+        }
+      };
+      
     
-    };
+    
 
-    useEffect(()=>{
-        const {id, edit } = state || {};
-        console.log(edit)
-        if(edit){
-            setEdit(edit)
-        }
-        if(id){
-            setId(id);
-            const options= {method: 'GET'};
-            fetch(`http://localhost:4000/api/job/job-posts/${id}`,options)
-            .then(response => response.json())
-            .then(response => setFormData({...response.jobPost}))
-            .catch(err => console.error(err));
-        }
-
-    }, [state])
+    useEffect(() => {
+        const { id, edit } = state || {};
+    
+        const fetchData = async () => {
+            try {
+                if (edit) {
+                    setEdit(edit);
+                }
+    
+                if (id) {
+                    setId(id);
+                    console.log('Fetching data for id:', id);
+    
+                    const options = { method: 'GET' };
+                    const response = await fetch(`http://localhost:4000/api/job/viewjob/${id}`, options);
+    
+                    if (!response.ok) {
+                        console.error('Server error:', response.statusText);
+                        // Handle the error case as needed, e.g., set an error state
+                        return;
+                    }
+    
+                    const responseData = await response.json();
+                    console.log('Fetched data:', responseData);
+    
+                    // Assuming responseData.jobPost is the correct property, update if needed
+                    setFormData({ ...responseData.data });
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                // Handle the error case as needed, e.g., set an error state
+            }
+        };
+    
+        fetchData(); // Call the fetchData function
+    }, [state]);
+    
+      
     const handleSubmit = async (e) => {
-        e.preventDefault()
-
-        if(
+        e.preventDefault();
+    
+        if (
             !formData.companyName ||
-            !formData.logoURL || 
+            !formData.logoURL ||
             !formData.jobType ||
             !formData.position ||
-            !formData.salary ||
+            !formData.MonthlySalary ||
             !formData.remote ||
             !formData.location ||
-            !formData.description ||
+            !formData.jobdescription ||
             !formData.about ||
-            !formData.skillsRequired||
+            !formData.skillRequired ||
             !formData.additional
-        ){
-            alert("Please fill all fields.")
+        ) {
+            alert("Please fill all fields.");
             return;
         }
+    
+        const token = window.localStorage.getItem("token");
+         console.log("Token:", token);
 
-        const token = window.localStorage.getItem("token")
-        const recruiterName = window.localStorage.getItem("name")
-        if(!token){
-            alert("Login first to create job")
-            return
+        const recruiterName = window.localStorage.getItem("name");
+    
+        if (!token) {
+            alert("Login first to create job");
+            return;
         }
-
-        const data = {...formData,name: recruiterName}
-
+    console.log('FormData: ', formData);
+        const data = { ...formData, name: recruiterName || '', skills: formData.skillRequired };
+    
         try {
-             
-            const response = await fetch("http://localhost:4000/api/job/jobdescription",{
-                method: "POST",
-                heders: {
-                    "Content-Type": "application/json",
-                    "Authorization": token
-                },
-                body:JSON.stringify(data),
-            });
+            const response = await fetch("http://localhost:4000/api/job/jobdescription", {
+               method: "POST",
+              headers: {
+                 "Content-Type": "application/json",
+                 "Authorization": `Bearer ${token}`,
+               },
+                body: JSON.stringify(data),
+             });
+             console.log("response: ", response)
+
+    
             if (!response.ok) {
-                alert("An error ocurred, please try again");
-              }
-
-            const resData = await response.json();
-            console.log(resData)
-            alert("Job created Successfully")
-            navigate("/joblist")
-            
-
-
-        } catch (error) {
-            console.error("there is problem of sending data request:", error)
-            
-        }
-
-    }
-
-    const handleEdit = async (e) =>{
-        e.preventDefault()
-        
-        if(
-            !formData.companyName ||
-            !formData.logoURL || 
-            !formData.jobType ||
-            !formData.position ||
-            !formData.salary ||
-            !formData.remote ||
-            !formData.location ||
-            !formData.description ||
-            !formData.about ||
-            !formData.skillsRequired||
-            !formData.additional
-        ){
-            alert("Please fill all fields.")
-            return;
-        }
-        const token = window.localStorage.getItem("token")
-        const recruiterName = window.localStorage.getItem("name")
-        if(!token){
-            alert("Login to create job ");
-            return
-        }
-        const data = {...formData, name:recruiterName}
-        try {
-
-            const response = await fetch(`http://localhost:3000/api/job/job-posts/${id}`,{
-                method: "PUT",
-                header: {
-                    "Content-Type": "application/json",
-                    "Authorization": token
-                },
-                body: JSON.stringify(data)
-            });
-
-
+                //console.error("Server error:", error.message);
+                console.error("Server error:", response.error.message);
+                alert("An error occurred, please try again");
+                return;
+            }
+    
             const resData = await response.json();
             console.log(resData);
-            alert("job edited Successfully")
-            navigate("/joblist")
-            
+            console.log("created",data)
+      
+            alert('Job created Successfully');
+            navigate('/joblist');
+
         } catch (error) {
-            console.error("there is problem of sending data request:", error)
-            
+            console.error("There is a problem sending the data request:", error.message);
         }
-    }
+    };
+    
+
+    const handleEdit = async (e) => {
+        e.preventDefault();
+    
+        const token = window.localStorage.getItem("token");
+        const recruiterName = window.localStorage.getItem("name");
+    
+        if (!token) {
+            alert("Login to create job ");
+            return;
+        }
+    
+        const data = { ...formData, name: recruiterName };
+    
+        try {
+            const response = await fetch(`http://localhost:4000/api/job/editjob/${id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
+                },
+                body: JSON.stringify(data),
+            });
+    
+            if (!response.ok) {
+                console.error("Server error:", response.statusText);
+                const errorData = await response.json(); // Try to parse error response
+                console.error("Server error details:", errorData);
+                alert("An error occurred, please check the console for details");
+                return;
+            }
+    
+            const resData = await response.json();
+            console.log(resData);
+            alert("Job edited Successfully");
+            navigate("/joblist");
+        } catch (error) {
+            console.error("There is a problem sending the data request:", error);
+            alert("An error occurred, please check the console for details");
+        }
+    };
+    
   return (
     <div className={style.container}>
       <h1 className={style.h1}> {edit? <>Edit</>: <>Add</>} job description</h1>
@@ -157,6 +187,7 @@ function JobForm() {
        <div className={style.form}>
          <div className={style.formGroup}>
             <label className={style.label}>Company Name</label>
+            
             <input className={style.input} type='text' name='companyName' value={formData.companyName} onChange={handleChange} placeholder='Enter your Company name here'  />
          </div>
          <div className={style.formGroup}>
@@ -169,7 +200,7 @@ function JobForm() {
          </div>
          <div className={style.formGroup}>
             <label className={style.label}> Monthly salary</label>
-            <input className={style.input} type='text' name='salary' value={formData.salary} onChange={handleChange} placeholder='Enter Amount in rupees'  />
+            <input className={style.input} type='text' name='MonthlySalary' value={formData.MonthlySalary} onChange={handleChange} placeholder='Enter Amount in rupees'  />
          </div>
          <div className={style.formGroup}>
             <label className={style.label}> Job Type</label>
@@ -193,7 +224,7 @@ function JobForm() {
          </div>
          <div className={style.formGroup}>
             <label className={style.label}>Job Description</label>
-            <input className={style.input} type='text' name='description' value={formData.description} onChange={handleChange} placeholder='Type the job description' />
+            <input className={style.input} type='text' name='jobdescription' value={formData.jobdescription} onChange={handleChange} placeholder='Type the job description' />
          </div>
          <div className={style.formGroup}>
             <label className={style.label}>About Company</label>
@@ -201,7 +232,7 @@ function JobForm() {
          </div>
          <div className={style.formGroup}>
             <label className={style.label}>Skills Requird</label>
-            <input className={style.input} type='text' name='skillsRequired' value={formData.skillsRequired} onChange={handleChange} placeholder='Enter the must have skills' />
+            <input className={style.input} type='text' name='skillRequired' value={formData.skillRequired} onChange={handleChange} placeholder='Enter the must have skills' />
          </div>
          <div className={style.formGroup}>
             <label className={style.label}>Information</label>

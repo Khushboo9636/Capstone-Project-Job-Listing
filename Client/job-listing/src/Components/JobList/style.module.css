@@ -58,8 +58,13 @@
 
 .infoLeft{
     margin: 1rem;
+    width: 70%;
 }
-
+.logo{
+    width: 26%;
+    height: 20%;
+    margin: 5%;
+}
 .position{
     font-size: 20px;
     font-weight: 600;
@@ -86,6 +91,7 @@
     padding: 0.6rem;
     border-radius: 6px;
     margin-right: 1rem;
+    display: inline-block;    
 }
 
 .btnGroup{

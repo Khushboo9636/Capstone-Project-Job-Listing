@@ -3,32 +3,41 @@ import {useLocation, useNavigate} from 'react-router-dom';
 import {useState, useEffect} from 'react';
 export const Details = ()=>{
     const navigate = useNavigate()
-    const [data, setData]= useState(undefined)
+    const [data, setData]= useState({})
     const {state} = useLocation();
     const { id } = state || {};
 
-    useEffect(()=>{
-        const options = {method: 'GET'};
-        fetch(`http://localhost:3000/api/job/viewjob/${id}`, options)
-        .then(response => response.json())
-        .then(response => setData({...response.jobPost}))
-        .catch(err => console.error(err));
-    },[id])
+    useEffect(() => {
+        const options = { method: 'GET' };
+        fetch(`http://localhost:4000/api/job/viewjob/${id}`, options)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then((response) => {
+            console.log('API Response:', response);
+            setData({ ...response.data });
+          })
+          .catch((err) => console.error('Error during fetching:', err));
+      }, [id]);
     return(
         <>
         {data?
         <>
              <div className={styles.container}>
-               <p className={styles.containerText}>{data.companyName}</p>
+               <p className={styles.containerText}>{data.position} {data.remote} job/internship at {data.companyName}</p>
             </div>
             <div className={styles.containerBottom}>
                 <div className={styles.preHeading}>
-                <p className={styles.lightText}>{data.jobType}</p>
+                <span className={styles.lightText}>{data.createdAt}</span> <p>  </p> <p>  </p>
+                <span className={styles.lightText}>{data.jobType}</span>
                 </div>
                 <div className={styles.heading}>
                     <div>
-                    <p className={styles.boldText}>{data.position}</p>
-                    <p className={styles.locationText}>{data.location}</p>
+                    <p className={styles.boldText}>{data.position} </p>
+                    <p className={styles.locationText}>{data.location} | India</p>
                     </div>
                     <div>
                         <button onClick={()=>{navigate('/addJob', { state: { id: data._id, edit:true} })}}  className={styles.edit}>Edit Job</button>
@@ -37,7 +46,7 @@ export const Details = ()=>{
                 <div className={styles.perks}>
                     <div>
                         <p className={styles.lightText}>Stipend</p>
-                        <p className={styles.lightText}>{data.salary}</p>
+                        <p className={styles.lightText}>Rs {data.MonthlySalary}/month</p>
                     </div>
                     <div>
                         <p className={styles.lightText}>Duration</p>
@@ -50,20 +59,27 @@ export const Details = ()=>{
                 </div>
                 <div className={styles.info}>
                     <h2>Skill(s) Required</h2>
-                    {data.skillsRequired.map((skill)=>{
-                        return (
-                            <span className={styles.skill} key={skill}>{skill}</span>
-                        )
-                    }
-                    )}
+                    {Array.isArray(data.skillRequired) ? (
+                   data.skillRequired.map((skillsString, index) => (
+                  <div key={index}>
+                     {skillsString.split(',').map((skill, skillIndex) => (
+                      <span className={styles.skill} key={skillIndex}>
+                           {skill.trim()} {/* trim to remove any leading/trailing spaces */}
+                      </span>
+                     ))}
+                  </div>
+                   ))
+                  ) : (
+                   <p>No skills required</p>
+                      )}
                 </div>
                 <div className={styles.info}>
                     <h2>About the job/internship</h2>
-                    <p>{data.description}</p>
+                    <p>{data.jobdescription}</p>
                 </div>
             </div>
             </>
-        :<>kkkk</>}
+        :<></>}
         </>
     )
 }

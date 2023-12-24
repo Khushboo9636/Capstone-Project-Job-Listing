@@ -27,7 +27,7 @@ const handleSubmit = async (e) =>{
         const response = await fetch("http://localhost:4000/api/user/register", {
           method: "POST",
           headers: {
-            "Content-Type": "appliction/json",
+            "Content-Type": "application/json",
 
           },
           body: JSON.stringify(formData)
@@ -41,12 +41,25 @@ const handleSubmit = async (e) =>{
         window.localStorage.setItem("user", responseData.user)
         window.localStorage.setItem("name", responseData.name)
         window.localStorage.setItem("token", responseData.token)
-        navigate("/listing")
+        navigate("/joblist")
 
     } catch (error) {
         console.error("Error during fetching", error);
-        alert("There is problem with sending request please check.")
+    
+        if (error instanceof Error && error.name === 'AbortError') {
+            // Handle abort, you can ignore this error
+            console.error('Fetch aborted');
+        } else {
+            const responseStatus = error?.response?.status;
+            const responseText = await error?.response?.text();
+    
+            console.error("Response status:", responseStatus);
+            console.error("Response text:", responseText);
+    
+            alert("There is a problem with sending the request. Please check the console for details.");
+        }
     }
+    
      
 
 }

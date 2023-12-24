@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router'
 function Navbar() {
     const navigate = useNavigate()
     const [isLoggedIn, setIsLoggedIn] = useState(!!window.localStorage.getItem("user"))
+    const recruiterName = window.localStorage.getItem('name');
     const handleLogout = ()=>{
         window.localStorage.removeItem("user")
         window.localStorage.removeItem("name")
@@ -13,11 +14,13 @@ function Navbar() {
     }
     return (
         <div className={styles.nav}>
+            
             <p className={styles.text}>JobFinder</p>
             <div>
                 {isLoggedIn?<>
                     <span onClick={handleLogout} className={styles.loggedInText}>Logout</span>
-                    <span className={styles.loggedInText}>Hello Recruiter</span>
+                    <span className={styles.loggedInText}>Hello {recruiterName}</span>
+                   
                 </>:
                 <>
                 <button onClick={()=>navigate("/login")}   className={styles.login}>Login</button>

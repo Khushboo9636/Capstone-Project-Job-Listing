@@ -14,7 +14,7 @@ function LoginForm(props) {
         e.preventDefault();
         if(data.email && data.password) {
             try {
-                const response = await fetch("http:localhost:3000/api/user/login", {
+                const response = await fetch("http://localhost:4000/api/user/login", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -30,7 +30,7 @@ function LoginForm(props) {
                 window.localStorage.setItem("user", responseData.user)
                 window.localStorage.setItem("name", responseData.recruiterName)
                 window.localStorage.setItem("token", responseData.token)
-                navigate("/listing")
+                navigate("/joblist")
                 
             } catch (error) {
                 alert("There was problem with the request , please try again");

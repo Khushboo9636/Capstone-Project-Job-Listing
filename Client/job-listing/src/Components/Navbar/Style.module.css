@@ -12,6 +12,27 @@
     box-sizing: border-box;
     z-index: 1;
 }
+.Rect1{
+         width:1512px;
+        height:139px;
+         left:0px ;
+         top: 0px;
+         position: absolute;
+        background:#ED5353;
+        border-top-left-radius: 62px;
+        border-top-right-radius: 55px;
+}
+.Rect2{
+    width: 349px; height: 63px; left: 0px; top: 76px; position: absolute; background: #FF6B6B;
+
+}
+.Rect3{
+    width: 390px; height: 105px; left: 509px; top: 0px; position: absolute; background: #FF6B6B;
+}
+.Rect4{
+width: 407.50px; height: 139px; left: 1040px; top: 0px; position: absolute; background: #FF6B6B;
+
+}
 
 .text{
     font-weight: 700;
