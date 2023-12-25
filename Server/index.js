@@ -7,7 +7,7 @@ dotenv.config()
 
 const app = express();
 app.use(cors({
-    origin: 'https://capstone-project-job-listing.vercel.app/',
+    origin: 'https://capstone-project-job-listing.vercel.app',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
 }));
