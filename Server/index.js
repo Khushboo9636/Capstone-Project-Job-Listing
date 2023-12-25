@@ -7,10 +7,16 @@ dotenv.config()
 
 const app = express();
 app.use(cors({
-    origin: 'https://capstone-project-job-listing.vercel.app/',
+    origin: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
 }));
+
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    next();
+    });
 
 // Middleware to capture raw body
 // app.use((req, res, next) => {
