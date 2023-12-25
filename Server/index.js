@@ -43,6 +43,7 @@ mongoose.connect(process.env.MONGODB_URL,{
     useUnifiedTopology: true,
     
 });
+app.options('*', cors());
 
 app.post('/your-endpoint', (req, res) => {
     console.log('Request Headers:', req.headers);
