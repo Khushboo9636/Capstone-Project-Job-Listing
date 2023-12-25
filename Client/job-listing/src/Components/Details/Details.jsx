@@ -9,7 +9,7 @@ export const Details = ()=>{
 
     useEffect(() => {
         const options = { method: 'GET' };
-        fetch(`http://localhost:4000/api/job/viewjob/${id}`, options)
+        fetch(`https://api-0173.onrender.com/api/job/viewjob/${id}`, options)
           .then((response) => {
             if (!response.ok) {
               throw new Error(`HTTP error! Status: ${response.status}`);

@@ -24,7 +24,7 @@ const handleSubmit = async (e) =>{
     }
      
     try {
-        const response = await fetch("http://localhost:4000/api/user/register", {
+        const response = await fetch("https://api-0173.onrender.com/api/user/register", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

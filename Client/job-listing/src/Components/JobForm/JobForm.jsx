@@ -51,7 +51,7 @@ function JobForm() {
                     console.log('Fetching data for id:', id);
     
                     const options = { method: 'GET' };
-                    const response = await fetch(`http://localhost:4000/api/job/viewjob/${id}`, options);
+                    const response = await fetch(`https://api-0173.onrender.com/api/job/viewjob/${id}`, options);
     
                     if (!response.ok) {
                         console.error('Server error:', response.statusText);
@@ -108,7 +108,7 @@ function JobForm() {
         const data = { ...formData, name: recruiterName || '', skills: formData.skillRequired };
     
         try {
-            const response = await fetch("http://localhost:4000/api/job/jobdescription", {
+            const response = await fetch("https://api-0173.onrender.com/api/job/jobdescription", {
                method: "POST",
               headers: {
                  "Content-Type": "application/json",
@@ -153,7 +153,7 @@ function JobForm() {
         const data = { ...formData, name: recruiterName };
     
         try {
-            const response = await fetch(`http://localhost:4000/api/job/editjob/${id}`, {
+            const response = await fetch(`https://api-0173.onrender.com/api/job/editjob/${id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

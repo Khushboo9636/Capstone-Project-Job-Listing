@@ -24,7 +24,7 @@ function Joblist() {
         //     setJobs([...arr])
         if (search.length > 0) {
             const options = { method: 'GET' };
-            fetch(`http://localhost:4000/api/job/viewjoblist?search=${search}`, options)
+            fetch(`https://api-0173.onrender.com/api/job/viewjoblist?search=${search}`, options)
                 .then(response => response.json())
                 .then(response => setJobs([...response.jobPosts]))
                 .catch(err => console.error(err));
@@ -32,7 +32,7 @@ function Joblist() {
         }
         else{
             const options = {method: 'GET'};
-        fetch(`http://localhost:4000/api/job/viewjoblist?skillsRequired=`, options)
+        fetch(`https://api-0173.onrender.com/api/job/viewjoblist?skillsRequired=`, options)
         .then(response => response.json())
         .then(response => setJobs([...response.jobPosts]))
         .catch(err => console.error(err));
@@ -52,7 +52,7 @@ function Joblist() {
         const options = { method: 'GET' };
         const searchQuery = skills.length > 0 ? `&skillRequired=${skills.join('&')}` : '';
     
-        fetch(`http://localhost:4000/api/job/viewjoblist?jobType=${searchQuery}&skillRequired=${skills.join('&')}`, options)
+        fetch(`https://api-0173.onrender.com/api/job/viewjoblist?jobType=${searchQuery}&skillRequired=${skills.join('&')}`, options)
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
