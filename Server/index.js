@@ -7,8 +7,8 @@ dotenv.config()
 
 const app = express();
 app.use(cors({
-    origin: 'http://localhost:3000',
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    origin: 'http://deploy-mern.vercel.app',
+    methods: {"GET","HEAD","PUT","PATCH","POST","DELETE"},
     credentials: true,
 }));
 
